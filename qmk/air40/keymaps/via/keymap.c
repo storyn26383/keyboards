@@ -52,6 +52,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case LT(1, KC_SPC):
+      return TAPPING_TERM + 25;
+    default:
+      return TAPPING_TERM;
+  }
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_QWERTY] = LAYOUT_ortho_4x12_2x2u(
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,          KC_T,    KC_Y,    KC_U,          KC_I,    KC_O,    KC_P,    KC_MINS,
