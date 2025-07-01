@@ -47,9 +47,9 @@ void td_lctl_finished(tap_dance_state_t *state, void *user_data) {
   td_lctl_state = cur_dance_state(state);
 
   switch (td_lctl_state) {
-    case SINGLE_TAP: tap_code(KC_CAPS); break;
+    case SINGLE_TAP: tap_code(KC_ESC); break;
     case SINGLE_HOLD: register_code(KC_LCTL); break;
-    case DOUBLE_TAP: tap_code(KC_ESC); break;
+    case DOUBLE_TAP: tap_code(KC_CAPS); break;
     case DOUBLE_HOLD: layer_on(L_READLINE); break;
   }
 }
@@ -119,10 +119,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [L_QWERTY] = LAYOUT_ortho_4x12_2x2u(
-    KC_TAB,      KC_Q,    KC_W,     KC_E,                 KC_R,          KC_T, KC_Y, KC_U,          KC_I,                 KC_O,                  KC_P,    KC_MINS,
-    TD(TD_LCTL), KC_A,    KC_S,     KC_D,                 KC_F,          KC_G, KC_H, KC_J,          KC_K,                 KC_L,                  KC_LBRC, MT(MOD_LCTL, KC_RBRC),
-    KC_LSFT,     KC_Z,    KC_X,     KC_C,                 KC_V,          KC_B, KC_N, KC_M,          KC_COMM,              KC_DOT,                KC_SLSH, MT(MOD_LSFT, KC_BSLS),
-    KC_F6,       KC_MPLY, MOD_LALT, MT(MOD_LGUI, KC_ESC), LT(1, KC_SPC),             LT(2, KC_SPC), MT(MOD_LGUI, KC_ENT), MT(MOD_LALT, KC_BSPC), KC_VOLD, KC_VOLU
+    KC_TAB,      KC_Q,    KC_W,    KC_E,    KC_R,          KC_T, KC_Y, KC_U,          KC_I,                 KC_O,                  KC_P,    KC_MINS,
+    TD(TD_LCTL), KC_A,    KC_S,    KC_D,    KC_F,          KC_G, KC_H, KC_J,          KC_K,                 KC_L,                  KC_LBRC, MT(MOD_LCTL, KC_RBRC),
+    KC_LSFT,     KC_Z,    KC_X,    KC_C,    KC_V,          KC_B, KC_N, KC_M,          KC_COMM,              KC_DOT,                KC_SLSH, MT(MOD_LSFT, KC_BSLS),
+    KC_F6,       KC_MPLY, KC_LALT, KC_LGUI, LT(1, KC_SPC),             LT(2, KC_SPC), MT(MOD_LGUI, KC_ENT), MT(MOD_LALT, KC_BSPC), KC_VOLD, KC_VOLU
   ),
   [L_SYMBOL] = LAYOUT_ortho_4x12_2x2u(
     KC_GRV,  KC_1,  KC_2,  KC_3,  KC_4,   KC_5,  KC_6,  KC_7,   KC_8,  KC_9,  KC_0,    KC_EQL,
