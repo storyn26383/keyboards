@@ -9,7 +9,7 @@ enum tap_dance_states {
 
 enum layer_names {
   L_QWERTY,
-  L_SYMBOL,
+  L_NUMBER,
   L_FUNCTION,
   L_READLINE
 };
@@ -124,17 +124,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_LSFT,     KC_Z,    KC_X,    KC_C,    KC_V,          KC_B, KC_N, KC_M,          KC_COMM,              KC_DOT,                KC_SLSH, MT(MOD_LSFT, KC_BSLS),
     KC_F6,       KC_MPLY, KC_LALT, KC_LGUI, LT(1, KC_SPC),             LT(2, KC_SPC), MT(MOD_LGUI, KC_ENT), MT(MOD_LALT, KC_BSPC), KC_VOLD, KC_VOLU
   ),
-  [L_SYMBOL] = LAYOUT_ortho_4x12_2x2u(
+  [L_NUMBER] = LAYOUT_ortho_4x12_2x2u(
     KC_GRV,  KC_1,  KC_2,  KC_3,  KC_4,   KC_5,  KC_6,  KC_7,   KC_8,  KC_9,  KC_0,    KC_EQL,
     KC_NO,   KC_NO, KC_NO, KC_NO, KC_NO,  KC_NO, KC_NO, KC_NO,  KC_NO, KC_NO, KC_SCLN, KC_QUOT,
     KC_LSFT, KC_NO, KC_NO, KC_NO, KC_NO,  KC_NO, KC_NO, KC_NO,  KC_NO, KC_NO, KC_NO,   KC_RSFT,
     KC_NO,   KC_NO, KC_NO, KC_NO, KC_SPC,               KC_SPC, KC_NO, KC_NO, KC_NO,   KC_NO
   ),
   [L_FUNCTION] = LAYOUT_ortho_4x12_2x2u(
-    KC_GRV,  KC_1,    KC_2,     KC_3,     KC_4,     KC_5,  KC_6,    KC_7,     KC_8,  KC_9,    KC_0,    KC_EQL,
-    KC_NO,   KC_NO,   RGB_RMOD, RGB_MOD,  RGB_TOG,  KC_NO, KC_LEFT, KC_DOWN,  KC_UP, KC_RGHT, KC_SCLN, KC_QUOT,
-    KC_LSFT, RGB_SPD, RGB_SPI,  RGB_VAD,  RGB_VAI,  KC_NO, KC_NO,   KC_NO,    KC_NO, KC_NO,   KC_NO,   KC_RSFT,
-    KC_MRWD, KC_MFFD, KC_NO,    QK_BOOT,  KC_SPC,                   KC_SPC,   KC_NO, KC_NO,   KC_BRID, KC_BRIU
+    KC_GRV,  KC_1,    KC_2,     KC_3,     KC_4,    KC_5,  KC_6,    KC_7,    KC_8,  KC_9,    KC_0,    KC_EQL,
+    KC_NO,   KC_NO,   RGB_RMOD, RGB_MOD,  RGB_TOG, KC_NO, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_SCLN, KC_QUOT,
+    KC_LSFT, RGB_SPD, RGB_SPI,  RGB_VAD,  RGB_VAI, KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_RSFT,
+    KC_MRWD, KC_MFFD, KC_NO,    QK_BOOT,  KC_SPC,                  KC_SPC,  KC_NO, KC_NO,   KC_BRID, KC_BRIU
   ),
   [L_READLINE] = LAYOUT_ortho_4x12_2x2u(
     KC_NO, KC_NO,    M_CTRL_W, M_CTRL_E, KC_NO,   KC_NO,   KC_NO,   M_CTRL_U, KC_NO, KC_NO, KC_UP,  KC_NO,
