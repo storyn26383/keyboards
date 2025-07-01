@@ -79,11 +79,25 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   }
 }
 
+void rgb_matrix_random_sethsv_noeeprom(void) {
+  uint8_t h = rand() % 256;
+  uint8_t s = 200 + (rand() % 56);
+  uint8_t v = 100;
+
+  rgb_matrix_sethsv_noeeprom(h, s, v);
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (!record->event.pressed) {
     return true;
   }
 
+  // rgb
+  if (get_highest_layer(layer_state) == L_QWERTY) {
+    rgb_matrix_random_sethsv_noeeprom();
+  }
+
+  // macro
   switch (keycode) {
     case M_CTRL_A:
       register_code(KC_LGUI);
@@ -131,10 +145,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO,   KC_NO, KC_NO, KC_NO, KC_SPC,               KC_SPC, KC_NO, KC_NO, KC_NO,   KC_NO
   ),
   [L_FUNCTION] = LAYOUT_ortho_4x12_2x2u(
-    KC_GRV,  KC_1,    KC_2,     KC_3,     KC_4,    KC_5,  KC_6,    KC_7,    KC_8,  KC_9,    KC_0,    KC_EQL,
-    KC_NO,   KC_NO,   RGB_RMOD, RGB_MOD,  RGB_TOG, KC_NO, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_SCLN, KC_QUOT,
-    KC_LSFT, RGB_SPD, RGB_SPI,  RGB_VAD,  RGB_VAI, KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_RSFT,
-    KC_MRWD, KC_MFFD, KC_NO,    QK_BOOT,  KC_SPC,                  KC_SPC,  KC_NO, KC_NO,   KC_BRID, KC_BRIU
+    KC_GRV,  KC_1,    KC_2,  KC_3,    KC_4,    KC_5,  KC_6,    KC_7,    KC_8,  KC_9,    KC_0,    KC_EQL,
+    KC_NO,   KC_NO,   KC_NO, KC_NO,   RGB_TOG, KC_NO, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_SCLN, KC_QUOT,
+    KC_LSFT, KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_RSFT,
+    KC_MRWD, KC_MFFD, KC_NO, QK_BOOT, KC_SPC,                  KC_SPC,  KC_NO, KC_NO,   KC_BRID, KC_BRIU
   ),
   [L_READLINE] = LAYOUT_ortho_4x12_2x2u(
     KC_NO, KC_NO,    M_CTRL_W, M_CTRL_E, KC_NO,   KC_NO,   KC_NO,   M_CTRL_U, KC_NO, KC_NO, KC_UP,  KC_NO,
@@ -143,3 +157,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO, KC_NO,    KC_NO,    KC_NO,    KC_NO,                     KC_NO,    KC_NO, KC_NO, KC_NO,  KC_NO
   )
 };
+
+/**
+ * Hue: H / 360 * 255
+ * Saturation: S / 100 * 255
+ * Value: V / 100 * 255
+ */
+layer_state_t layer_state_set_user(layer_state_t state) {
+  uint8_t layer = get_highest_layer(state);
+
+  switch (layer) {
+    case L_QWERTY:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_REACTIVE_MULTIWIDE);
+      rgb_matrix_random_sethsv_noeeprom();
+      break;
+
+    case L_NUMBER:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+      rgb_matrix_sethsv_noeeprom(128, 255, 50);
+      break;
+
+    case L_FUNCTION:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+      rgb_matrix_sethsv_noeeprom(64, 255, 50);
+      break;
+
+    case L_READLINE:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+      rgb_matrix_sethsv_noeeprom(213, 255, 50);
+      break;
+  }
+
+  return state;
+}
