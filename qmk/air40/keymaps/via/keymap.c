@@ -180,8 +180,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [L_QWERTY] = LAYOUT_ortho_4x12_2x2u(
     KC_TAB,      KC_Q,    KC_W,    KC_E,    KC_R,          KC_T, KC_Y, KC_U,          KC_I,        KC_O,        KC_P,    KC_MINS,
-    TD(TD_LCTL), KC_A,    KC_S,    KC_D,    KC_F,          KC_G, KC_H, KC_J,          KC_K,        KC_L,        KC_LBRC, MT(MOD_LCTL, KC_RBRC),
-    KC_LSFT,     KC_Z,    KC_X,    KC_C,    KC_V,          KC_B, KC_N, KC_M,          KC_COMM,     KC_DOT,      KC_SLSH, MT(MOD_LSFT, KC_BSLS),
+    TD(TD_LCTL), KC_A,    KC_S,    KC_D,    KC_F,          KC_G, KC_H, KC_J,          KC_K,        KC_L,        KC_LBRC, LCTL_T(KC_RBRC),
+    KC_LSFT,     KC_Z,    KC_X,    KC_C,    KC_V,          KC_B, KC_N, KC_M,          KC_COMM,     KC_DOT,      KC_SLSH, RSFT_T(KC_BSLS),
     KC_F6,       KC_MPLY, KC_LALT, KC_LGUI, LT(1, KC_SPC),             LT(2, KC_SPC), TD(TD_RGUI), TD(TD_RALT), KC_VOLD, KC_VOLU
   ),
   [L_NUMBER] = LAYOUT_ortho_4x12_2x2u(
