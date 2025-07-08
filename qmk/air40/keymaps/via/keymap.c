@@ -1,30 +1,29 @@
 #include QMK_KEYBOARD_H
 
 enum tap_dance_states {
-  SINGLE_TAP = 1,
-  SINGLE_HOLD = 2,
-  DOUBLE_TAP = 3,
-  DOUBLE_HOLD = 4
+  SINGLE_TAP,
+  SINGLE_HOLD,
+  DOUBLE_TAP,
+  DOUBLE_HOLD
 };
 
 enum layer_names {
   L_QWERTY,
   L_NUMBER,
   L_FUNCTION,
-  L_READLINE
-};
-
-enum tap_dances {
-  TD_LCTL,
-  TD_RGUI,
-  TD_RALT
+  L_READLINE,
+  L_SYMBOL
 };
 
 enum macros {
-  M_CTRL_A = SAFE_RANGE,
-  M_CTRL_E,
-  M_CTRL_W,
-  M_CTRL_U
+  M_CTL_A = SAFE_RANGE,
+  M_CTL_E,
+  M_CTL_W,
+  M_CTL_U
+};
+
+enum tap_dances {
+  TD_LCTL
 };
 
 int cur_dance_state(tap_dance_state_t *state) {
@@ -50,80 +49,33 @@ void td_lctl_finished(tap_dance_state_t *state, void *user_data) {
   switch (td_lctl_state) {
     case SINGLE_TAP: tap_code(KC_LCTL); break;
     case SINGLE_HOLD: register_code(KC_LCTL); break;
-    case DOUBLE_TAP: tap_code(KC_ESC); break;
+    case DOUBLE_TAP: tap_code(KC_ESCAPE); break;
     case DOUBLE_HOLD: layer_on(L_READLINE); break;
   }
 }
 void td_lctl_reset(tap_dance_state_t *state, void *user_data) {
   switch (td_lctl_state) {
-    case SINGLE_TAP: break; // tap_code handles this automatically
+    case SINGLE_TAP: break;
     case SINGLE_HOLD: unregister_code(KC_LCTL); break;
-    case DOUBLE_TAP: break; // tap_code handles this automatically
+    case DOUBLE_TAP: break;
     case DOUBLE_HOLD: layer_off(L_READLINE); break;
   }
 
   td_lctl_state = 0;
 }
 
-static int td_rgui_state;
-void td_rgui_finished(tap_dance_state_t *state, void *user_data) {
-  td_rgui_state = cur_dance_state(state);
-
-  switch (td_rgui_state) {
-    case SINGLE_TAP: tap_code(KC_ENT); break;
-    case SINGLE_HOLD: register_code(KC_LGUI); break;
-    case DOUBLE_TAP: tap_code(KC_ENT); break;
-    case DOUBLE_HOLD: register_code(KC_ENT); break;
-  }
-}
-void td_rgui_reset(tap_dance_state_t *state, void *user_data) {
-  switch (td_rgui_state) {
-    case SINGLE_TAP: break; // tap_code handles this automatically
-    case SINGLE_HOLD: unregister_code(KC_LGUI); break;
-    case DOUBLE_TAP: break; // tap_code handles this automatically
-    case DOUBLE_HOLD: unregister_code(KC_ENT); break;
-  }
-
-  td_rgui_state = 0;
-}
-
-static int td_ralt_state;
-void td_ralt_finished(tap_dance_state_t *state, void *user_data) {
-  td_ralt_state = cur_dance_state(state);
-
-  switch (td_ralt_state) {
-    case SINGLE_TAP: tap_code(KC_BSPC); break;
-    case SINGLE_HOLD: register_code(KC_LALT); break;
-    case DOUBLE_TAP: tap_code(KC_BSPC); break;
-    case DOUBLE_HOLD: register_code(KC_BSPC); break;
-  }
-}
-void td_ralt_reset(tap_dance_state_t *state, void *user_data) {
-  switch (td_ralt_state) {
-    case SINGLE_TAP: break; // tap_code handles this automatically
-    case SINGLE_HOLD: unregister_code(KC_LALT); break;
-    case DOUBLE_TAP: break; // tap_code handles this automatically
-    case DOUBLE_HOLD: unregister_code(KC_BSPC); break;
-  }
-
-  td_ralt_state = 0;
-}
-
-tap_dance_action_t tap_dance_actions[] = {
-  [TD_LCTL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_lctl_finished, td_lctl_reset),
-  [TD_RGUI] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_rgui_finished, td_rgui_reset),
-  [TD_RALT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_ralt_finished, td_ralt_reset)
-};
-
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case LT(1, KC_SPC):
     case TD(TD_LCTL):
-      return TAPPING_TERM + 15;
+      return TAPPING_TERM + 25;
     default:
       return TAPPING_TERM;
   }
 }
+
+tap_dance_action_t tap_dance_actions[] = {
+  [TD_LCTL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_lctl_finished, td_lctl_reset)
+};
 
 void rgb_matrix_random_sethsv_noeeprom(void) {
   uint8_t h = rand() % 256;
@@ -145,28 +97,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   // macro
   switch (keycode) {
-    case M_CTRL_A:
+    case M_CTL_A:
       register_code(KC_LGUI);
       register_code(KC_LEFT);
       unregister_code(KC_LEFT);
       unregister_code(KC_LGUI);
       return false;
 
-    case M_CTRL_E:
+    case M_CTL_E:
       register_code(KC_LGUI);
       register_code(KC_RGHT);
       unregister_code(KC_RGHT);
       unregister_code(KC_LGUI);
       return false;
 
-    case M_CTRL_W:
+    case M_CTL_W:
       register_code(KC_LALT);
       register_code(KC_DEL);
       unregister_code(KC_DEL);
       unregister_code(KC_LALT);
       return false;
 
-    case M_CTRL_U:
+    case M_CTL_U:
       register_code(KC_LGUI);
       register_code(KC_DEL);
       unregister_code(KC_DEL);
@@ -176,33 +128,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   return true;
 }
-
-const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [L_QWERTY] = LAYOUT_ortho_4x12_2x2u(
-    KC_TAB,      KC_Q,    KC_W,    KC_E,    KC_R,          KC_T, KC_Y, KC_U,          KC_I,        KC_O,        KC_P,    KC_MINS,
-    TD(TD_LCTL), KC_A,    KC_S,    KC_D,    KC_F,          KC_G, KC_H, KC_J,          KC_K,        KC_L,        KC_LBRC, LCTL_T(KC_RBRC),
-    KC_LSFT,     KC_Z,    KC_X,    KC_C,    KC_V,          KC_B, KC_N, KC_M,          KC_COMM,     KC_DOT,      KC_SLSH, RSFT_T(KC_BSLS),
-    KC_F6,       KC_MPLY, KC_LALT, KC_LGUI, LT(1, KC_SPC),             LT(2, KC_SPC), TD(TD_RGUI), TD(TD_RALT), KC_VOLD, KC_VOLU
-  ),
-  [L_NUMBER] = LAYOUT_ortho_4x12_2x2u(
-    KC_GRV,  KC_1,  KC_2,  KC_3,  KC_4,   KC_5,  KC_6,  KC_7,   KC_8,  KC_9,  KC_0,    KC_EQL,
-    KC_NO,   KC_NO, KC_NO, KC_NO, KC_NO,  KC_NO, KC_NO, KC_NO,  KC_NO, KC_NO, KC_SCLN, KC_QUOT,
-    KC_LSFT, KC_NO, KC_NO, KC_NO, KC_NO,  KC_NO, KC_NO, KC_NO,  KC_NO, KC_NO, KC_NO,   KC_RSFT,
-    KC_NO,   KC_NO, KC_NO, KC_NO, KC_SPC,               KC_SPC, KC_NO, KC_NO, KC_NO,   KC_NO
-  ),
-  [L_FUNCTION] = LAYOUT_ortho_4x12_2x2u(
-    KC_GRV,  KC_1,    KC_2,  KC_3,    KC_4,    KC_5,  KC_6,    KC_7,    KC_8,  KC_9,    KC_0,    KC_EQL,
-    KC_NO,   KC_NO,   KC_NO, KC_NO,   RGB_TOG, KC_NO, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_SCLN, KC_QUOT,
-    KC_LSFT, KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_RSFT,
-    KC_MRWD, KC_MFFD, KC_NO, QK_BOOT, KC_SPC,                  KC_SPC,  KC_NO, KC_NO,   KC_BRID, KC_BRIU
-  ),
-  [L_READLINE] = LAYOUT_ortho_4x12_2x2u(
-    KC_NO, KC_NO,    M_CTRL_W, M_CTRL_E, KC_NO,   KC_NO,   KC_NO,   M_CTRL_U, KC_NO, KC_NO, KC_UP,  KC_NO,
-    KC_NO, M_CTRL_A, KC_NO,    KC_NO,    KC_RGHT, KC_NO,   KC_BSPC, KC_ENT,   KC_NO, KC_NO, KC_ESC, KC_NO,
-    KC_NO, KC_NO,    KC_NO,    KC_NO,    KC_NO,   KC_LEFT, KC_DOWN, KC_ENT,   KC_NO, KC_NO, KC_NO,  KC_NO,
-    KC_NO, KC_NO,    KC_NO,    KC_NO,    KC_NO,                     KC_NO,    KC_NO, KC_NO, KC_NO,  KC_NO
-  )
-};
 
 /**
  * Hue: H / 360 * 255
@@ -232,7 +157,45 @@ layer_state_t layer_state_set_user(layer_state_t state) {
       rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
       rgb_matrix_sethsv_noeeprom(213, 255, 50);
       break;
+
+    case L_SYMBOL:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+      rgb_matrix_sethsv_noeeprom(30, 218, 50);
+      break;
   }
 
   return state;
 }
+
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+  [L_QWERTY] = LAYOUT_ortho_4x12_2x2u(
+    KC_TAB,      KC_Q,  KC_W,    KC_E,    KC_R,          KC_T, KC_Y, KC_U,          KC_I,             KC_O,            KC_P,    KC_BSLS,
+    TD(TD_LCTL), KC_A,  KC_S,    KC_D,    KC_F,          KC_G, KC_H, KC_J,          KC_K,             KC_L,            KC_LBRC, KC_RBRC,
+    KC_LSFT,     KC_Z,  KC_X,    KC_C,    KC_V,          KC_B, KC_N, KC_M,          KC_COMM,          KC_DOT,          KC_SLSH, KC_RSFT,
+    KC_NO,       KC_NO, KC_LALT, KC_LGUI, LT(1, KC_SPC),             LT(2, KC_SPC), RGUI_T(KC_ENTER), LCTL_T(KC_BSPC), KC_NO,   KC_NO
+  ),
+  [L_NUMBER] = LAYOUT_ortho_4x12_2x2u(
+    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8, KC_9,   KC_0,     _______,
+    _______, _______, _______, _______, _______, _______, _______, KC_4,    KC_5, KC_6,   KC_SCLN,  KC_QUOT,
+    _______, _______, _______, _______, _______, _______, _______, KC_1,    KC_2, KC_3,   KC_MINUS, KC_EQUAL,
+    _______, _______, _______, _______, _______,                   KC_COMM, KC_0, KC_DOT, _______,  _______
+  ),
+  [L_FUNCTION] = LAYOUT_ortho_4x12_2x2u(
+    KC_NO, KC_NO, KC_NO,   KC_NO, KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO,
+    KC_NO, KC_NO, KC_NO,   KC_NO, RGB_TOG, KC_NO, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_SCLN, KC_NO,
+    KC_NO, KC_NO, KC_NO,   KC_NO, KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO,
+    KC_NO, KC_NO, QK_BOOT, KC_NO, KC_NO,                   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO
+  ),
+  [L_READLINE] = LAYOUT_ortho_4x12_2x2u(
+    KC_NO, KC_NO,   M_CTL_W, M_CTL_E, KC_NO,   KC_NO,   KC_NO,   M_CTL_U, KC_NO, KC_NO, KC_UP,  KC_NO,
+    KC_NO, M_CTL_A, KC_NO,   KC_NO,   KC_RGHT, KC_NO,   KC_BSPC, KC_ENT,  KC_NO, KC_NO, KC_ESC, KC_NO,
+    KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_LEFT, KC_DOWN, KC_ENT,  KC_NO, KC_NO, KC_NO,  KC_NO,
+    KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,                     KC_NO,   KC_NO, KC_NO, KC_NO,  KC_NO
+  ),
+  [L_SYMBOL] = LAYOUT_ortho_4x12_2x2u(
+    LSFT(KC_GRV), LSFT(KC_1), LSFT(KC_2), LSFT(KC_3), LSFT(KC_4), LSFT(KC_5), LSFT(KC_6), LSFT(KC_7), LSFT(KC_8), LSFT(KC_9), LSFT(KC_0),     _______,
+    _______,      _______,    _______,    _______,    _______,    _______,    _______,    LSFT(KC_4), LSFT(KC_5), LSFT(KC_6), LSFT(KC_SCLN),  LSFT(KC_QUOT),
+    _______,      _______,    _______,    _______,    _______,    _______,    _______,    LSFT(KC_1), LSFT(KC_2), LSFT(KC_3), LSFT(KC_MINUS), LSFT(KC_EQUAL),
+    _______,      _______,    _______,    _______,    _______,                            _______,    _______,    _______,    _______,        _______
+  )
+};
