@@ -23,7 +23,8 @@ enum macros {
 };
 
 enum tap_dances {
-  TD_LCTL
+  TD_LCTL,
+  TD_LSFT
 };
 
 int cur_dance_state(tap_dance_state_t *state) {
@@ -64,17 +65,38 @@ void td_lctl_reset(tap_dance_state_t *state, void *user_data) {
   td_lctl_state = 0;
 }
 
+static int td_lsft_state;
+void td_lsft_finished(tap_dance_state_t *state, void *user_data) {
+  td_lsft_state = cur_dance_state(state);
+
+  switch (td_lsft_state) {
+    case SINGLE_TAP: tap_code(KC_LSFT); break;
+    case SINGLE_HOLD: register_code(KC_LSFT); break;
+    case DOUBLE_TAP: layer_on(L_SYMBOL); break;
+    case DOUBLE_HOLD: layer_on(L_SYMBOL); break;
+  }
+}
+void td_lsft_reset(tap_dance_state_t *state, void *user_data) {
+  switch (td_lsft_state) {
+    case SINGLE_TAP: break;
+    case SINGLE_HOLD: unregister_code(KC_LSFT); break;
+    case DOUBLE_TAP: layer_off(L_SYMBOL); break;
+    case DOUBLE_HOLD: layer_off(L_SYMBOL); break;
+  }
+
+  td_lsft_state = 0;
+}
+
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case TD(TD_LCTL):
-      return TAPPING_TERM + 25;
     default:
       return TAPPING_TERM;
   }
 }
 
 tap_dance_action_t tap_dance_actions[] = {
-  [TD_LCTL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_lctl_finished, td_lctl_reset)
+  [TD_LCTL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_lctl_finished, td_lctl_reset),
+  [TD_LSFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_lsft_finished, td_lsft_reset)
 };
 
 void rgb_matrix_random_sethsv_noeeprom(void) {
@@ -169,22 +191,22 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [L_QWERTY] = LAYOUT_ortho_4x12_2x2u(
-    KC_TAB,      KC_Q,  KC_W,    KC_E,    KC_R,          KC_T, KC_Y, KC_U,          KC_I,             KC_O,            KC_P,    KC_BSLS,
-    TD(TD_LCTL), KC_A,  KC_S,    KC_D,    KC_F,          KC_G, KC_H, KC_J,          KC_K,             KC_L,            KC_LBRC, KC_RBRC,
-    KC_LSFT,     KC_Z,  KC_X,    KC_C,    KC_V,          KC_B, KC_N, KC_M,          KC_COMM,          KC_DOT,          KC_SLSH, KC_RSFT,
-    KC_NO,       KC_NO, KC_LALT, KC_LGUI, LT(1, KC_SPC),             LT(2, KC_SPC), RGUI_T(KC_ENTER), LCTL_T(KC_BSPC), KC_NO,   KC_NO
+    KC_TAB,      KC_Q,  KC_W,    KC_E,    KC_R,          KC_T, KC_Y, KC_U,          KC_I,            KC_O,            KC_P,    KC_BSLS,
+    TD(TD_LCTL), KC_A,  KC_S,    KC_D,    KC_F,          KC_G, KC_H, KC_J,          KC_K,            KC_L,            KC_LBRC, KC_RBRC,
+    TD(TD_LSFT), KC_Z,  KC_X,    KC_C,    KC_V,          KC_B, KC_N, KC_M,          KC_COMM,         KC_DOT,          KC_SLSH, TD(TD_LSFT),
+    KC_NO,       KC_NO, KC_LALT, KC_LGUI, LT(1, KC_SPC),             LT(1, KC_SPC), LT(2, KC_ENTER), LCTL_T(KC_BSPC), KC_NO,   KC_NO
   ),
   [L_NUMBER] = LAYOUT_ortho_4x12_2x2u(
     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8, KC_9,   KC_0,     _______,
     _______, _______, _______, _______, _______, _______, _______, KC_4,    KC_5, KC_6,   KC_SCLN,  KC_QUOT,
     _______, _______, _______, _______, _______, _______, _______, KC_1,    KC_2, KC_3,   KC_MINUS, KC_EQUAL,
-    _______, _______, _______, _______, _______,                   KC_COMM, KC_0, KC_DOT, _______,  _______
+    _______, _______, _______, _______, _______,                   _______, KC_0, KC_DOT, _______,  _______
   ),
   [L_FUNCTION] = LAYOUT_ortho_4x12_2x2u(
-    KC_NO, KC_NO, KC_NO,   KC_NO, KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO,
-    KC_NO, KC_NO, KC_NO,   KC_NO, RGB_TOG, KC_NO, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_SCLN, KC_NO,
-    KC_NO, KC_NO, KC_NO,   KC_NO, KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO,
-    KC_NO, KC_NO, QK_BOOT, KC_NO, KC_NO,                   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO
+    KC_NO, KC_NO,   KC_BRIU, KC_MFFD, KC_VOLU, KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO,
+    KC_NO, RGB_TOG, KC_NO,   KC_MPLY, KC_MUTE, KC_F6, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_SCLN, KC_NO,
+    KC_NO, KC_NO,   KC_BRID, KC_MRWD, KC_VOLD, KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO,
+    KC_NO, KC_NO,   QK_BOOT, KC_NO,   KC_NO,                   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO
   ),
   [L_READLINE] = LAYOUT_ortho_4x12_2x2u(
     KC_NO, KC_NO,   M_CTL_W, M_CTL_E, KC_NO,   KC_NO,   KC_NO,   M_CTL_U, KC_NO, KC_NO, KC_UP,  KC_NO,
