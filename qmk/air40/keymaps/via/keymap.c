@@ -190,34 +190,34 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [L_QWERTY] = LAYOUT_ortho_4x12_2x2u(
-    KC_TAB,      KC_Q,  KC_W,    KC_E,    KC_R,          KC_T, KC_Y, KC_U,          KC_I,            KC_O,            KC_P,    KC_BSLS,
-    TD(TD_LCTL), KC_A,  KC_S,    KC_D,    KC_F,          KC_G, KC_H, KC_J,          KC_K,            KC_L,            KC_LBRC, KC_RBRC,
-    TD(TD_LSFT), KC_Z,  KC_X,    KC_C,    KC_V,          KC_B, KC_N, KC_M,          KC_COMM,         KC_DOT,          KC_SLSH, TD(TD_LSFT),
-    KC_NO,       KC_NO, KC_LALT, KC_LGUI, LT(1, KC_SPC),             LT(1, KC_SPC), LT(2, KC_ENTER), LCTL_T(KC_BSPC), KC_NO,   KC_NO
+  [L_QWERTY] = LAYOUT_ortho_4x12_1x2uC(
+    KC_TAB,      KC_Q,  KC_W,  KC_E,    KC_R,    KC_T,          KC_Y, KC_U,            KC_I,            KC_O,   KC_P,    KC_BSLS,
+    TD(TD_LCTL), KC_A,  KC_S,  KC_D,    KC_F,    KC_G,          KC_H, KC_J,            KC_K,            KC_L,   KC_LBRC, KC_RBRC,
+    TD(TD_LSFT), KC_Z,  KC_X,  KC_C,    KC_V,    KC_B,          KC_N, KC_M,            KC_COMM,         KC_DOT, KC_SLSH, TD(TD_LSFT),
+    KC_NO,       KC_NO, KC_NO, KC_LALT, KC_LGUI, LT(1, KC_SPC),       LT(2, KC_ENTER), LCTL_T(KC_BSPC), KC_NO,  KC_NO,   KC_NO
   ),
-  [L_NUMBER] = LAYOUT_ortho_4x12_2x2u(
-    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8, KC_9,   KC_0,     _______,
-    _______, _______, _______, _______, _______, _______, _______, KC_4,    KC_5, KC_6,   KC_SCLN,  KC_QUOT,
-    _______, _______, _______, _______, _______, _______, _______, KC_1,    KC_2, KC_3,   KC_MINUS, KC_EQUAL,
-    _______, _______, _______, _______, _______,                   _______, KC_0, KC_DOT, _______,  _______
+  [L_NUMBER] = LAYOUT_ortho_4x12_1x2uC(
+    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7, KC_8,   KC_9,    KC_0,     _______,
+    _______, _______, _______, _______, _______, _______, _______, KC_4, KC_5,   KC_6,    KC_SCLN,  KC_QUOT,
+    _______, _______, _______, _______, _______, _______, KC_GRV,  KC_1, KC_2,   KC_3,    KC_MINUS, KC_EQUAL,
+    _______, _______, _______, _______, _______, _______,          KC_0, KC_DOT, _______, _______,  _______
   ),
-  [L_FUNCTION] = LAYOUT_ortho_4x12_2x2u(
+  [L_FUNCTION] = LAYOUT_ortho_4x12_1x2uC(
     KC_NO, KC_NO,   KC_BRIU, KC_MFFD, KC_VOLU, KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO,
     KC_NO, RGB_TOG, KC_NO,   KC_MPLY, KC_MUTE, KC_F6, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_SCLN, KC_NO,
     KC_NO, KC_NO,   KC_BRID, KC_MRWD, KC_VOLD, KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO,
-    KC_NO, KC_NO,   QK_BOOT, KC_NO,   KC_NO,                   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO
+    KC_NO, KC_NO,   KC_NO,   QK_BOOT, KC_NO,   KC_NO,          KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO
   ),
-  [L_READLINE] = LAYOUT_ortho_4x12_2x2u(
+  [L_READLINE] = LAYOUT_ortho_4x12_1x2uC(
     KC_NO, KC_NO,   M_CTL_W, M_CTL_E, KC_NO,   KC_NO,   KC_NO,   M_CTL_U, KC_NO, KC_NO, KC_UP,  KC_NO,
     KC_NO, M_CTL_A, KC_NO,   KC_NO,   KC_RGHT, KC_NO,   KC_BSPC, KC_ENT,  KC_NO, KC_NO, KC_ESC, KC_NO,
     KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_LEFT, KC_DOWN, KC_ENT,  KC_NO, KC_NO, KC_NO,  KC_NO,
-    KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,                     KC_NO,   KC_NO, KC_NO, KC_NO,  KC_NO
+    KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,            KC_NO,   KC_NO, KC_NO, KC_NO,  KC_NO
   ),
-  [L_SYMBOL] = LAYOUT_ortho_4x12_2x2u(
+  [L_SYMBOL] = LAYOUT_ortho_4x12_1x2uC(
     LSFT(KC_GRV), LSFT(KC_1), LSFT(KC_2), LSFT(KC_3), LSFT(KC_4), LSFT(KC_5), LSFT(KC_6), LSFT(KC_7), LSFT(KC_8), LSFT(KC_9), LSFT(KC_0),     _______,
     _______,      _______,    _______,    _______,    _______,    _______,    _______,    LSFT(KC_4), LSFT(KC_5), LSFT(KC_6), LSFT(KC_SCLN),  LSFT(KC_QUOT),
     _______,      _______,    _______,    _______,    _______,    _______,    _______,    LSFT(KC_1), LSFT(KC_2), LSFT(KC_3), LSFT(KC_MINUS), LSFT(KC_EQUAL),
-    _______,      _______,    _______,    _______,    _______,                            _______,    _______,    _______,    _______,        _______
+    _______,      _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,        _______
   )
 };
