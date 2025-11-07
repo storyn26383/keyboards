@@ -197,10 +197,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO,       KC_NO, KC_NO, KC_LALT, KC_LGUI, LT(1, KC_SPC),       LT(2, KC_ENTER), LCTL_T(KC_BSPC), KC_NO,  KC_NO,   KC_NO
   ),
   [L_NUMBER] = LAYOUT_ortho_4x12_1x2uC(
-    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7, KC_8,   KC_9,    KC_0,     _______,
-    _______, _______, _______, _______, _______, _______, _______, KC_4, KC_5,   KC_6,    KC_SCLN,  KC_QUOT,
-    _______, _______, _______, _______, _______, _______, KC_GRV,  KC_1, KC_2,   KC_3,    KC_MINUS, KC_EQUAL,
-    _______, _______, _______, _______, _______, _______,          KC_0, KC_DOT, _______, _______,  _______
+    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,   KC_7,    KC_8,    KC_9,   KC_0,     _______,
+    _______, _______, _______, _______, _______, _______, KC_DOT, KC_4,    KC_5,    KC_6,   KC_SCLN,  KC_QUOT,
+    _______, _______, _______, _______, _______, _______, KC_0,   KC_1,    KC_2,    KC_3,   KC_MINUS, KC_EQUAL,
+    _______, _______, _______, _______, _______, _______,         _______, _______, _______, _______, _______
   ),
   [L_FUNCTION] = LAYOUT_ortho_4x12_1x2uC(
     KC_NO, KC_NO,   KC_BRIU, KC_MFFD, KC_VOLU, KC_NO, KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO,
